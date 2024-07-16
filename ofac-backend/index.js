@@ -24,10 +24,13 @@ app.post('/api/screen', async (req, res) => {
           },
           body: JSON.stringify({
             "apiKey": "ef3b0074-bf79-4be5-bcc9-6c84ef5e95bb",
-            "source": ["sdn", "eu"],
+            "source": ["sdn"],
             "cases": [
             { "name": name},
-            //{"name": name, "nationality": country}
+            {"name": name, "identification": [
+                {"country": country}
+            ]},
+            { "name": name,"dob": birthYear}
             ] 
           }),
           }
@@ -38,15 +41,31 @@ app.post('/api/screen', async (req, res) => {
         return response.json();
       }).then(data => {
         // Process the data
-        hit = false;
+        matches = {
+            name: false,
+            country: false,
+            boY: false,
+        }
+        
         const results = data.results;
+        hit = false;
         console.log('Response data:', data); 
-        results.forEach(result => {
-            hit = result.matchCount > 0
+        results.forEach((result,index) => {
+            hit = result.matchCount > 0 || hit;
+            if(index == 0 && result.matchCount > 0){
+                matches.name = true;
+            }
+            else if(index == 1 && result.matchCount > 0){
+                matches.country = true
+            }
+            else if (index == 2 && result.matchCount > 0){
+                matches.year = true
+            }
+
         });
     
         // Send the processed results back to the client
-        res.json({hit});
+        res.json({hit, matches});
       })
   
     } catch (error) {

@@ -8,10 +8,19 @@ function testBackend() {
       },
       body: JSON.stringify({
         "apiKey": "ef3b0074-bf79-4be5-bcc9-6c84ef5e95bb",
-        "source": ["SDN","EU"],
+        "source": ["SDN"],
+      // "types": ["person"],
         "minScore": 95,
-        "cases": [{
-          "name": "Abu Abbas"
+        "cases": [{"name": "SAING, U Sai Lone", "identification": [
+            {"idNumber": "0"}
+        ]
+           },{
+            "name": "Client Vessel",
+            "identification": [
+                {
+                    "idNumber": "0"
+                }
+            ]
         }]
       }),
     })
@@ -24,10 +33,10 @@ function testBackend() {
     .then(data => {
       // Assuming the data is in the format { results: [...] }
       const results = data.results;
-      console.log('Response data:', data); 
-      results.forEach(result =>
-      {result.matchCount > 0 ? console.log('hit'):console.log('0')}
-      )
+      const matches = results.match;
+      console.log(matches);
+      console.log('Response data:', results.matches[1].sectionField); 
+     
      
       return data; // Return the full data for further processing if needed
     })

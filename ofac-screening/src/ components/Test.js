@@ -31,7 +31,7 @@ export function Test () {
             </div>
             <div className="form-control">
               <label>Year</label>
-              <input type="number" name="year" 
+              <input type="text" name="year" 
               {...register('year', { required: 'Year is required' })} />
               {errors.year && <span>{errors.year.message}</span>}
             </div>
@@ -49,7 +49,11 @@ export function Test () {
           {result && (
             <div>
             <h2>{result.hit ? 'Hit' : 'Clear'}</h2>
-            
+            <p>
+              Name: {result.matches.name ? '✅' : '❌'} DoB:{' '}
+              {result.matches.year ? '✅' : '❌'} Country:{' '}
+              {result.matches.country ? '✅' : '❌'}
+            </p>
             </div>
       )}
         </div>
