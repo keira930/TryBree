@@ -1,0 +1,102 @@
+System design Fraud System
+    A[User Registration] -->|First Name, Last Name, Email| B[Email Verification]
+    B --> C[SMS Verification]
+    C --> D[Debit Card Connection]
+    D --> E[Bank Connection]
+    E --> F{Initial Fraud Check}
+
+    F -->|No Match| G[Proceed with Loan Application]
+    F -->|Potential Match| H[Manual Review]
+    H -->|Approved| G
+    H -->|Rejected| I[Reject Application]
+
+    J[Fraud Detection System]
+    K[User Profile Database]
+    L[Machine Learning Model]
+
+    A -.->|Store Data| K
+    B -.->|Update| K
+    C -.->|Update| K
+    D -.->|Update| K
+    E -.->|Update| K
+
+    F <-.->|Query| J
+    J <--->|Update/Query| K
+    J <--->|Train/Use| L
+
+    subgraph "Fraud Detection Components"
+        J
+        K
+        L
+    end
+
+    subgraph "Admin Interface"
+        M[Dashboard]
+        N[Alert System]
+    end
+
+    J -.->|Alerts| N
+    M <--> K
+
+
+User Journey:
+
+The top part of the diagram shows the user journey from registration to bank connection.
+Each step collects different pieces of user information.
+
+
+Fraud Detection System:
+
+The central component is the Fraud Detection System, which interacts with other parts of the system.
+It's connected to a User Profile Database and a Machine Learning Model.
+
+
+Data Collection and Storage:
+
+As users progress through the journey, their data is stored and updated in the User Profile Database.
+This allows for real-time updates and comparisons.
+
+
+Initial Fraud Check:
+
+After the bank connection step, an initial fraud check is performed.
+This check queries the Fraud Detection System to look for potential matches.
+
+
+Decision Points:
+
+If no match is found, the user proceeds with the loan application.
+If a potential match is detected, the application goes to manual review.
+
+
+Manual Review:
+
+Human intervention for borderline cases.
+Can either approve the application to proceed or reject it.
+
+
+Machine Learning Model:
+
+Continuously trained on user data and fraud patterns.
+Helps improve the accuracy of fraud detection over time.
+
+Admin Interface:
+
+Includes a dashboard for monitoring and an alert system.
+Allows administrators to review flagged cases and overall system performance.
+
+
+
+Key Features and Rationale:
+
+Multi-point Verification: By collecting and verifying data at multiple stages, the system creates a more comprehensive user profile, making it harder for fraudsters to create multiple accounts.
+
+Real-time Updates: The User Profile Database is updated at each step, allowing for immediate fraud checks and reducing the wait time for users.
+Machine Learning Integration: This allows the system to adapt to new fraud patterns and improve accuracy over time, reducing false positives and negatives.
+
+Balanced Approach: The system uses automatic checks for efficiency but includes manual review for borderline cases, balancing speed with accuracy.
+Privacy and Security: The centralized User Profile Database ensures that sensitive information is stored in one secure location, rather than being distributed across multiple systems.
+
+Flexibility: The system can easily incorporate additional data points or verification steps in the future if needed.
+
+User Experience Consideration: By performing the main fraud check after all data is collected, the system minimizes interruptions in the user journey while still maintaining security.
